@@ -1,0 +1,40 @@
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class FaturamentoDiario {
+    public static void main(String[] args) {
+        String jsonString = "{ \"faturamento\": [\"0\", \"1500\", \"0\", \"2000\", \"3000\", \"0\", \"4000\", \"0\", \"5000\", \"0\", \"0\", \"6000\"] }";
+        JSONObject jsonObject = new JSONObject(jsonString);
+        JSONArray faturamento = jsonObject.getJSONArray("faturamento");
+
+        double[] valores = new double[faturamento.length()];
+        double soma = 0;
+        int diasComFaturamento = 0;
+
+        for (int i = 0; i < faturamento.length(); i++) {
+            double valor = faturamento.getDouble(i);
+            if (valor > 0) {
+                valores[i] = valor;
+                soma += valor;
+                diasComFaturamento++;
+            } else {
+                valores[i] = 0;
+            }
+        }
+
+        double media = soma / diasComFaturamento;
+        double menor = valores[0];
+        double maior = valores[0];
+        int diasAcimaDaMedia = 0;
+
+        for (double valor : valores) {
+            if (valor > maior) maior = valor;
+            if (valor < menor && valor > 0) menor = valor;
+            if (valor > media) diasAcimaDaMedia++;
+        }
+
+        System.out.println("Menor valor de faturamento: R$" + menor);
+        System.out.println("Maior valor de faturamento: R$" + maior);
+        System.out.println("Número de dias com faturamento acima da média: " + diasAcimaDaMedia);
+    }
+}
